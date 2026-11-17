@@ -17,7 +17,8 @@ DevSync v1.0.0 已完整部署并测试通过：枢纽机 = 本机（G32，192.1
 | **管理员凭据** | `E:\devsync\secrets\gitea-admin.txt`（用户 dev，密码在其中）⚠ 勿提交/勿外传 |
 | **CLI 令牌** | `E:\devsync\secrets\devsync-cli-token.txt` + 各机 `%USERPROFILE%\.devsync\token.dpapi`（DPAPI 加密） |
 | 服务 | Windows 服务 `DevSyncGitea`（NSSM，自启） |
-| 日志 | `E:\devsync\logs\`（服务捕获）+ `E:\devsync\gitea\data\log\`（Gitea 文件日志） |
+| **托盘程序** | `E:\devsync\bin\DevSyncTray.exe`（状态灯/启停/气泡提醒，HKCU 自启已启用；源码 tray\devsync_tray.py，日志 E:\devsync\logs\tray.log） |
+| 日志 | `E:\devsync\logs\`（服务捕获 + 托盘）+ `E:\devsync\gitea\data\log\`（Gitea 文件日志） |
 | 测试 | 本仓库 `test\run-all.ps1`，证据在 `evidence\` |
 | 枢纽网页 | http://192.168.168.199:3300 （仅局域网） |
 
