@@ -88,12 +88,25 @@ devsync handoff "下班交接"      # 可选：代码+密钥+交接笔记一键�
 ```
 ├── bin/          devsync.ps1 + devsync.bat（命令行工具本体）
 ├── install/      install-hub.ps1（枢纽安装）/ install-another-pc.ps1（电脑接入）/ app.ini.template
+├── tray/         DevSyncTray 托盘程序（枢纽状态灯/启停/气泡提醒）
 ├── test/         run-all.ps1 总入口 + t01~t06 六个测试套件
 ├── evidence/     测试运行证据（断言结果、控制台日志、汇总报告）
 ├── docs/         方案调研/部署手册/接入指南/使用与交接/安全设计/FAQ/测试报告/知识库总结
 ├── handoff/      HANDOFF.md 交接文档（当前部署状态、凭据位置、待办）
 └── website/      演示网站源码（部署地址见 README 顶部）
 ```
+
+## 托盘程序（枢纽机专用，已部署）
+
+枢纽是 Windows 服务（开机自启、无人值守），**DevSyncTray 托盘**让你随时一眼看到它开没开：
+
+- 🟢 绿点 = 枢纽运行中（服务正常 + 端口 3300 可连）
+- 🟡 黄点 = 启动中
+- 🔴 红点 = 已停止 / 异常（**此时弹气泡提醒你**；恢复时也弹）
+- 托盘右键菜单：打开枢纽网页 / 启动 / 停止 / 重启服务 / devsync 体检 / 开机自启 / 退出
+- 新图标默认在托盘溢出区（时间旁的 `^` 箭头里）；想常驻显示：任务栏右键 → 任务栏设置 → 其他系统托盘图标 → 打开 DevSyncTray
+
+源码 `tray\devsync_tray.py`，重新打包：`tray\build.bat`（PyInstaller）。运行日志：`E:\devsync\logs\tray.log`。
 
 ## 文档导航
 

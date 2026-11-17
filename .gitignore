@@ -8,3 +8,9 @@ secrets/
 Thumbs.db
 desktop.ini
 .zcode-site/
+
+# PyInstaller 托盘构建产物
+tray/build/
+tray/dist/
+tray/*.spec
+tray/__pycache__/

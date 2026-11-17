@@ -3,6 +3,18 @@
 本项目的所有重要变更都记录在此文件。
 格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循语义化版本。
 
+## [1.1.0] - 2026-11-18
+
+### 新增：DevSyncTray 托盘程序（枢纽状态可视化）
+
+- 托盘常驻：绿点=运行中 / 黄点=启动中 / 红点=停止异常，状态变化弹气泡通知
+- 菜单操作：打开枢纽网页 / 启动 / 停止 / 重启服务（UAC 静默提权）/ devsync 体检 / 开机自启开关 / 退出
+- 状态探测：每 3 秒同时检查服务状态（sc query）与端口连通（127.0.0.1:3300），端口未就绪单独标黄
+- 运行日志：E:\devsync\logs\tray.log
+- 已部署到枢纽机 E:\devsync\bin\DevSyncTray.exe，HKCU 开机自启已启用
+- 端到端验证：停服→托盘 3 秒内检测并通知→恢复→再次通知，日志三轮状态转换齐全
+- 源码 tray\devsync_tray.py，打包 tray\build.bat（PyInstaller onefile）
+
 ## [1.0.0] - 2026-11-18
 
 ### 首次发布：局域网三机代码接力方案（DevSync）
