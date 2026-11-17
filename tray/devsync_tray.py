@@ -89,10 +89,12 @@ state = {'svc': '?', 'port': False, 'label': '检测中…'}
 _last_key = None  # 用于状态变化通知
 
 def _query_service():
-    """返回服务状态字符串：RUNNING / STOPPED / START_PENDING / ... / NOT_INSTALLED"""
+    """返回服务状态字符串：RUNNING / STOPPED / START_PENDING / ... / NOT_INSTALLED
+    必须带 CREATE_NO_WINDOW：无控制台 exe 里调 sc 会让 Windows Terminal 每 3 秒弹黑窗"""
     try:
         p = subprocess.run(['sc', 'query', SERVICE_NAME],
-                           capture_output=True, timeout=8)
+                           capture_output=True, timeout=8,
+                           creationflags=subprocess.CREATE_NO_WINDOW)
         out = p.stdout
         if b'RUNNING' in out:
             return 'RUNNING'
@@ -193,7 +195,8 @@ def act_doctor(icon, item):
             p = subprocess.run(
                 ['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass',
                  '-File', os.path.join(DS_BIN, 'devsync.ps1'), 'doctor'],
-                capture_output=True, timeout=120)
+                capture_output=True, timeout=120,
+                creationflags=subprocess.CREATE_NO_WINDOW)
             out = (p.stdout or b'').decode('utf-8', 'ignore')
             fail = p.returncode != 0
             brief = '体检全部通过 ✓' if not fail else '有问题，点菜单「体检详情」'
