@@ -1,0 +1,9 @@
+﻿===== devsync 体检 =====
+[devsync] ✔ git: git version 2.55.0.windows.5
+[devsync] ✔ 配置: 枢纽 http://192.168.168.199:3300 / 用户 dev / 登记 1 个项目
+[devsync] ✔ 枢纽连通: Gitea 28.4.0
+[devsync] ✔ 令牌有效
+[devsync] ✔ 密钥目录: C:\Users\Administrator\.devsync-secrets
+
+[devsync] ✔ 体检全部通过 ✔
+[devsync] RESULT: OK

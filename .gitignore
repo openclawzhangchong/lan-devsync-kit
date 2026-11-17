@@ -1,0 +1,9 @@
+# DevSync 仓库忽略规则
+# 敏感文件永远不入库
+*.dpapi
+secrets/
+*.env
+!*.env.example
+*.tmp
+Thumbs.db
+desktop.ini

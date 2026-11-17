@@ -1,0 +1,203 @@
+
+########## t01-hub-health ##########
+[00:19:10] === t01 枢纽健康检查 ===
+[00:19:10] PASS  Windows服务 DevSyncGitea 状态 (实际=Running)
+True
+[00:19:11] PASS  端口3300监听中 (实际=True)
+True
+[00:19:11] Gitea 版本: 28.4.0
+[00:19:11] PASS  Gitea API 可访问 (实际=True)
+True
+[00:19:11] PASS  令牌认证用户 (实际=dev)
+True
+[00:19:11] PASS  防火墙规则存在(仅限本网段) (实际=True)
+True
+[00:19:11] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t01-hub-health.txt
+
+########## t02-git-relay ##########
+[00:19:11] === t02 三机接力测试 ===
+[00:19:11] 删除枢纽仓库 demo 失败(可忽略): 远程服务器返回错误: (404) 未找到。
+[devsync] ✔ 枢纽已创建私有仓库 demo
+[devsync] 已 git init（main 分支）
+To http://192.168.168.199:3300/dev/demo.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 项目 [demo] 已接入枢纽（私有），登记路径 C:\Users\Administrator\AppData\Local\Temp\devsync-test-001911\machineA\demo
+  日常用: devsync save / devsync sync；换电脑用: devsync take demo
+[devsync] RESULT: OK
+[00:19:13] PASS  A机 init 推送成功 (实际=0)
+True
+Cloning into 'C:\Users\Administrator\AppData\Local\Temp\devsync-test-001911\machineB\demo'...
+[devsync] ✔ 已克隆并登记 [demo] → C:\Users\Administrator\AppData\Local\Temp\devsync-test-001911\machineB\demo
+[devsync] RESULT: OK
+[00:19:14] PASS  B机 clone 成功 (实际=0)
+True
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+Current branch main is up to date.
+To http://192.168.168.199:3300/dev/demo.git
+   2f2e43c..641dfcc  main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 已推送到枢纽 (main)
+[devsync] RESULT: OK
+[00:19:16] PASS  B机 save 推送成功 (实际=0)
+True
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+   2f2e43c..641dfcc  main       -> origin/main
+Updating 2f2e43c..641dfcc
+Fast-forward
+ app.js | 1 +
+ 1 file changed, 1 insertion(+)
+Everything up-to-date
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 已推送到枢纽 (main)
+[devsync] ✔ 同步完成 [C:\Users\Administrator\AppData\Local\Temp\devsync-test-001911\machineA\demo]
+[devsync] RESULT: OK
+[00:19:18] PASS  A机 sync 成功 (实际=0)
+True
+[00:19:18] PASS  A机已收到B机的优化内容 (实际=True)
+True
+Cloning into 'C:\Users\Administrator\AppData\Local\Temp\devsync-test-001911\machineC\demo'...
+[devsync] ✔ 已克隆并登记 [demo] → C:\Users\Administrator\AppData\Local\Temp\devsync-test-001911\machineC\demo
+[devsync] RESULT: OK
+[devsync] ✔ 密钥已拉取到 C:\Users\Administrator\.devsync-secrets
+[devsync] RESULT: OK
+
+===== 接手摘要 [demo] =====
+641dfcc B机: v2
+2f2e43c devsync init: 首次接入枢纽
+[devsync] ✔ 接手完成，可以继续干活
+[devsync] RESULT: OK
+[00:19:20] PASS  C机 take 接手成功 (实际=0)
+True
+[00:19:20] PASS  C机拿到全部两轮优化 (实际=True)
+True
+枢纽: http://192.168.168.199:3300   用户: dev
+  [demo-app] 领先 0 / 落后 0
+  [demo] 领先 0 / 落后 0
+[devsync] RESULT: OK
+[00:19:20] PASS  status 能看到接力项目 (实际=True)
+True
+[00:19:20] 清理测试现场...
+[00:19:20] 枢纽仓库 demo 已删除
+[00:19:20] 清理完成
+[00:19:20] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t02-git-relay.txt
+
+########## t03-conflict ##########
+[00:19:20] === t03 冲突检测测试 ===
+[00:19:20] 删除枢纽仓库 demo 失败(可忽略): 远程服务器返回错误: (404) 未找到。
+[devsync] ✔ 枢纽已创建私有仓库 demo
+[devsync] 已 git init（main 分支）
+To http://192.168.168.199:3300/dev/demo.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 项目 [demo] 已接入枢纽（私有），登记路径 C:\Users\Administrator\AppData\Local\Temp\devsync-test-001920\A\demo
+  日常用: devsync save / devsync sync；换电脑用: devsync take demo
+[devsync] RESULT: OK
+Cloning into 'C:\Users\Administrator\AppData\Local\Temp\devsync-test-001920\B\demo'...
+[devsync] ✔ 已克隆并登记 [demo] → C:\Users\Administrator\AppData\Local\Temp\devsync-test-001920\B\demo
+[devsync] RESULT: OK
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+Current branch main is up to date.
+To http://192.168.168.199:3300/dev/demo.git
+   a603492..9020349  main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 已推送到枢纽 (main)
+[devsync] RESULT: OK
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+   a603492..9020349  main       -> origin/main
+Auto-merging app.js
+CONFLICT (content): Merge conflict in app.js
+Rebasing (1/1)
+error: could not apply 96c99c7... A改第一行
+hint: Resolve all conflicts manually, mark them as resolved with
+hint: "git add/rm <conflicted_files>", then run "git rebase --continue".
+hint: You can instead skip this commit: run "git rebase --skip".
+hint: To abort and get back to the state before "git rebase", run "git rebase --abort".
+hint: Disable this message with "git config set advice.mergeConflict false"
+Could not apply 96c99c7... # A改第一行
+[devsync] RESULT: CONFLICT
+[devsync] ✘ 远端有冲突的新改动，涉及文件: app.js。本机改动已保留在 git stash 里，请手工裁决后 git stash drop
+[00:19:27] PASS  A机 save 因冲突失败(退出码非0) (实际=True)
+True
+[00:19:27] PASS  机器可读结果行为 CONFLICT (实际=True)
+True
+[devsync] RESULT: ERROR
+[devsync] ✘ fatal: ref HEAD is not a symbolic ref
+[00:19:27] PASS  冲突态再save被拒绝(CONFLICT) (实际=True)
+True
+[00:19:27] 清理测试现场...
+[00:19:27] 枢纽仓库 demo 已删除
+[00:19:27] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t03-conflict.txt
+
+########## t04-secrets ##########
+[00:19:27] === t04 密钥同步测试 ===
+To http://192.168.168.199:3300/dev/secrets-sync.git
+   cecf71f..90fd15d  main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 密钥已推送到枢纽私库 [secrets-sync]（仅本人可读）
+[devsync] RESULT: OK
+[00:19:29] PASS  secrets push 成功 (实际=0)
+True
+[devsync] ✔ 已初始化本地密钥目录: C:\Users\Administrator\.devsync-secrets
+[devsync] ✔ 密钥已拉取到 C:\Users\Administrator\.devsync-secrets
+[devsync] RESULT: OK
+[00:19:30] PASS  secrets pull 成功(模拟新电脑) (实际=0)
+True
+[00:19:30] PASS  拉取的密钥内容一致 (实际=password=FAKE_SECRET_NOT_REAL_001927)
+True
+[00:19:30] PASS  secrets-sync 私库私有 (实际=True)
+True
+Everything up-to-date
+branch 'main' set up to track 'origin/main'.
+[devsync] ✔ 密钥已推送到枢纽私库 [secrets-sync]（仅本人可读）
+[devsync] RESULT: OK
+[00:19:31] 测试密钥文件已清理并同步
+[00:19:31] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t04-secrets.txt
+
+########## t05-security ##########
+[00:19:31] === t05 安全测试 ===
+[00:19:31] PASS  无凭据克隆私有仓库被拒绝 (实际=True)
+True
+[00:19:31] PASS  无凭据API访问私库不可见(HTTP 404) (实际=True)
+True
+[00:19:31] PASS  带凭据访问私库可见且私有 (实际=True)
+True
+[00:19:31] PASS  注册接口被拒(HTTP 405) (实际=True)
+True
+[00:19:31] PASS  防火墙规则限制来源IP(仅本网段+回环) (实际=True)
+True
+[00:19:31] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t05-security.txt
+
+########## t06-doctor ##########
+[00:19:31] === t06 doctor 体检 ===
+===== devsync 体检 =====
+[devsync] ✔ git: git version 2.55.0.windows.5
+[devsync] ✔ 配置: 枢纽 http://192.168.168.199:3300 / 用户 dev / 登记 1 个项目
+[devsync] ✔ 枢纽连通: Gitea 28.4.0
+[devsync] ✔ 令牌有效
+[devsync] ✔ 密钥目录: C:\Users\Administrator\.devsync-secrets
+
+[devsync] ✔ 体检全部通过 ✔
+[devsync] RESULT: OK
+[00:19:32] --- doctor 输出见上方 ---
+[00:19:32] PASS  doctor 退出码 0 (实际=0)
+True
+[00:19:32] PASS  体检输出含枢纽连通 (实际=True)
+True
+[00:19:32] PASS  体检输出含令牌有效 (实际=True)
+True
+[00:19:32] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t06-doctor.txt
+
+================ 测试汇总 ================
+  t01-hub-health       PASS 5  FAIL 0
+  t02-git-relay        PASS 8  FAIL 0
+  t03-conflict         PASS 3  FAIL 0
+  t04-secrets          PASS 4  FAIL 0
+  t05-security         PASS 5  FAIL 0
+  t06-doctor           PASS 3  FAIL 0
+  合计: PASS 28 / FAIL 0 —— 全部通过 ✔ (耗时 21.6s)
+汇总已写入 evidence\test-summary.md

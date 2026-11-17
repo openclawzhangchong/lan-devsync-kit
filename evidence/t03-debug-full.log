@@ -1,0 +1,40 @@
+[00:17:09] === t03 冲突检测测试 ===
+[00:17:09] 删除枢纽仓库 demo 失败(可忽略): 远程服务器返回错误: (404) 未找到。
+[devsync] 鉁?鏋㈢航宸插垱寤虹鏈変粨搴?demo
+[devsync] 宸?git init锛坢ain 鍒嗘敮锛?To http://192.168.168.199:3300/dev/demo.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] 鉁?椤圭洰 [demo] 宸叉帴鍏ユ灑绾斤紙绉佹湁锛夛紝鐧昏璺緞 C:\Users\Administrator\AppData\Local\Temp\devsync-test-001709\A\demo
+  鏃ュ父鐢? devsync save / devsync sync锛涙崲鐢佃剳鐢? devsync take demo
+Cloning into 'C:\Users\Administrator\AppData\Local\Temp\devsync-test-001709\B\demo'...
+[devsync] 鉁?宸插厠闅嗗苟鐧昏 [demo] 鈫?C:\Users\Administrator\AppData\Local\Temp\devsync-test-001709\B\demo
+fatal: not a git repository (or any of the parent directories): .git
+git.exe : fatal: not a git repository (or any of the parent directories): .git
+At E:\devsync\bin\devsync.ps1:254 char:15
++     $branch = & git -C $dir symbolic-ref --short HEAD 2>$null
++               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ectories): .git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+Current branch main is up to date.
+To http://192.168.168.199:3300/dev/demo.git
+   582f89a..0fe3575  main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] 鉁?宸叉帹閫佸埌鏋㈢航 (main)
+[00:17:14] FAIL  A机 save 因冲突失败(退出码非0) (期望=True 实际=False)
+False
+[00:17:14] FAIL  报错确因代码冲突(含冲突+stash指引) (期望=True 实际=False)
+False
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Everything up-to-date
+branch 'main' set up to track 'origin/main'.
+[devsync] 鉁?宸叉帹閫佸埌鏋㈢航 (main)
+[00:17:16] FAIL  冲突态再save被拒绝并含指引 (期望=True 实际=False)
+False
+[00:17:16] 清理测试现场...
+[00:17:16] 枢纽仓库 demo 已删除
+[00:17:16] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t03-conflict.txt

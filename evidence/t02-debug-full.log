@@ -1,0 +1,55 @@
+[00:15:42] === t02 三机接力测试 ===
+[00:15:42] 删除枢纽仓库 demo 失败(可忽略): 远程服务器返回错误: (404) 未找到。
+[devsync] 鉁?鏋㈢航宸插垱寤虹鏈変粨搴?demo
+[devsync] 宸?git init锛坢ain 鍒嗘敮锛?To http://192.168.168.199:3300/dev/demo.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+[devsync] 鉁?椤圭洰 [demo] 宸叉帴鍏ユ灑绾斤紙绉佹湁锛夛紝鐧昏璺緞 C:\Users\Administrator\AppData\Local\Temp\devsync-test-001542\machineA\demo
+  鏃ュ父鐢? devsync save / devsync sync锛涙崲鐢佃剳鐢? devsync take demo
+[00:15:44] PASS  A机 init 推送成功 (实际=0)
+True
+Cloning into 'C:\Users\Administrator\AppData\Local\Temp\devsync-test-001542\machineB\demo'...
+[devsync] 鉁?宸插厠闅嗗苟鐧昏 [demo] 鈫?C:\Users\Administrator\AppData\Local\Temp\devsync-test-001542\machineB\demo
+[00:15:45] PASS  B机 clone 成功 (实际=0)
+True
+fatal: not a git repository (or any of the parent directories): .git
+git.exe : fatal: not a git repository (or any of the parent directories): .git
+At E:\devsync\bin\devsync.ps1:254 char:15
++     $branch = & git -C $dir symbolic-ref --short HEAD 2>$null
++               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (fatal: not a gi...ectories): .git:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+[00:15:45] FAIL  B机 save 推送成功 (期望=0 实际=1)
+False
+From http://192.168.168.199:3300/dev/demo
+ * branch            main       -> FETCH_HEAD
+Already up to date.
+Everything up-to-date
+branch 'main' set up to track 'origin/main'.
+[devsync] 鉁?宸叉帹閫佸埌鏋㈢航 (main)
+[devsync] 鉁?鍚屾瀹屾垚 [C:\Users\Administrator\AppData\Local\Temp\devsync-test-001542\machineA\demo]
+[00:15:47] PASS  A机 sync 成功 (实际=0)
+True
+[00:15:47] FAIL  A机已收到B机的优化内容 (期望=True 实际=False)
+False
+Cloning into 'C:\Users\Administrator\AppData\Local\Temp\devsync-test-001542\machineC\demo'...
+[devsync] 鉁?宸插厠闅嗗苟鐧昏 [demo] 鈫?C:\Users\Administrator\AppData\Local\Temp\devsync-test-001542\machineC\demo
+[devsync] 鉁?瀵嗛挜宸叉媺鍙栧埌 C:\Users\Administrator\.devsync-secrets
+
+===== 鎺ユ墜鎽樿 [demo] =====
+28d60d7 devsync init: 棣栨鎺ュ叆鏋㈢航
+[devsync] 鉁?鎺ユ墜瀹屾垚锛屽彲浠ョ户缁共娲?
+[00:15:48] PASS  C机 take 接手成功 (实际=0)
+True
+[00:15:49] FAIL  C机拿到全部两轮优化 (期望=True 实际=False)
+False
+鏋㈢航: http://192.168.168.199:3300   鐢ㄦ埛: dev
+  [demo-app] 棰嗗厛 0 / 钀藉悗 0
+  [demo] 棰嗗厛 0 / 钀藉悗 0
+[00:15:49] FAIL  status 能看到接力项目 (期望=True 实际=False)
+False
+[00:15:49] 清理测试现场...
+[00:15:49] 枢纽仓库 demo 已删除
+[00:15:49] 清理完成
+[00:15:49] 结果已写入 E:\github\lan-devsync-kit\test\..\evidence\t02-git-relay.txt

@@ -1,0 +1,5 @@
+﻿PASS  Windows服务 DevSyncGitea 状态
+PASS  端口3300监听中
+PASS  Gitea API 可访问
+PASS  令牌认证用户
+PASS  防火墙规则存在(仅限本网段)

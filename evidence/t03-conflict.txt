@@ -1,0 +1,3 @@
+﻿PASS  A机 save 因冲突失败(退出码非0)
+PASS  机器可读结果行为 CONFLICT
+PASS  冲突态再save被拒绝(CONFLICT)

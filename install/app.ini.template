@@ -1,0 +1,54 @@
+; DevSync 局域网代码接力枢纽 —— Gitea 配置模板
+; 安装脚本会替换 @@SECRET@@ @@ROOT@@ @@IP@@ @@PORT@@
+; 隐私要点: 禁止注册 / 新仓库默认私有 / 仅监听局域网 HTTP
+
+RUN_MODE = prod
+WORK_PATH = @@ROOT@@/gitea
+RUN_USER = Administrator
+
+[repository]
+ROOT = @@ROOT@@/gitea-repos
+DEFAULT_PRIVATE = private
+FORCE_PRIVATE = false
+
+[server]
+PROTOCOL = http
+HTTP_ADDR = 0.0.0.0
+HTTP_PORT = @@PORT@@
+DOMAIN = @@IP@@
+ROOT_URL = http://@@IP@@:@@PORT@@/
+APP_DATA_PATH = @@ROOT@@/gitea/data
+DISABLE_SSH = true
+OFFLINE_MODE = true
+LANDING_PAGE = explore
+ENABLE_GZIP = true
+
+[database]
+DB_TYPE = sqlite3
+PATH = @@ROOT@@/gitea/data/gitea.db
+SQLITE_JOURNAL_MODE = WAL
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = @@SECRET@@
+MIN_PASSWORD_LENGTH = 10
+PASSWORD_COMPLEXITY = lower,upper,digit
+IMPORT_LOCAL_PATH_GIT = false
+
+[service]
+DISABLE_REGISTRATION = true
+SHOW_REGISTRATION_BUTTON = false
+
+[mailer]
+ENABLED = false
+
+[log]
+MODE = file
+LEVEL = Info
+ROOT_PATH = @@ROOT@@/gitea/data/log
+
+[api]
+ENABLE_SWAGGER = false
+
+[other]
+SHOW_FOOTER_VERSION = false

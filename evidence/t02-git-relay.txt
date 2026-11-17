@@ -1,0 +1,8 @@
+﻿PASS  A机 init 推送成功
+PASS  B机 clone 成功
+PASS  B机 save 推送成功
+PASS  A机 sync 成功
+PASS  A机已收到B机的优化内容
+PASS  C机 take 接手成功
+PASS  C机拿到全部两轮优化
+PASS  status 能看到接力项目
