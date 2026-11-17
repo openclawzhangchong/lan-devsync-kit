@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevSync · 局域网多电脑代码接力工具</title>
+<style>
+  :root {
+    --bg: #0f1420; --panel: #171e2e; --panel2: #1c2538; --line: #2a3550;
+    --text: #e6ebf5; --muted: #8b96ad; --accent: #5ec26a; --accent2: #4f9cf7;
+    --warn: #e8b04b; --code-bg: #121826;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: var(--bg); color: var(--text); font-family: "Microsoft YaHei", "PingFang SC", sans-serif; line-height: 1.7; }
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+  header { padding: 64px 0 40px; background: linear-gradient(180deg, #131a2a 0%, var(--bg) 100%); border-bottom: 1px solid var(--line); }
+  h1 { font-size: 34px; letter-spacing: 1px; }
+  h1 .badge { display: inline-block; background: var(--accent); color: #0b120b; font-size: 14px; padding: 2px 10px; border-radius: 20px; vertical-align: middle; margin-left: 12px; font-weight: bold; }
+  .subtitle { color: var(--muted); font-size: 17px; margin-top: 10px; max-width: 760px; }
+  .meta { margin-top: 18px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .meta a { color: var(--accent2); text-decoration: none; border: 1px solid var(--line); background: var(--panel); padding: 7px 16px; border-radius: 8px; font-size: 14px; }
+  .meta a:hover { border-color: var(--accent2); }
+  h2 { font-size: 22px; margin: 44px 0 16px; padding-left: 12px; border-left: 4px solid var(--accent); }
+  h3 { font-size: 17px; margin: 22px 0 8px; color: var(--accent2); }
+  p { margin: 8px 0; color: var(--text); }
+  .muted { color: var(--muted); font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; background: var(--panel); border-radius: 10px; overflow: hidden; }
+  th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--line); font-size: 14.5px; vertical-align: top; }
+  th { background: var(--panel2); color: var(--muted); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+  code, pre { font-family: Consolas, "Courier New", monospace; }
+  code { background: var(--code-bg); padding: 2px 7px; border-radius: 5px; font-size: 13.5px; color: #9fd3ff; }
+  pre { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; overflow-x: auto; font-size: 13.5px; line-height: 1.65; margin: 12px 0; color: #c9d6ee; }
+  pre code { background: none; padding: 0; color: inherit; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin: 16px 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  .card .icon { font-size: 26px; }
+  .card h4 { margin: 8px 0 6px; font-size: 16px; }
+  .card p { color: var(--muted); font-size: 13.5px; margin: 0; }
+  .ok { color: var(--accent); font-weight: bold; }
+  .warn { color: var(--warn); }
+  .arch { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; padding: 18px; overflow-x: auto; font-family: Consolas, monospace; font-size: 12.5px; line-height: 1.5; color: #a9c1e8; white-space: pre; }
+  footer { margin-top: 60px; padding: 26px 0 40px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13.5px; }
+  footer a { color: var(--accent2); text-decoration: none; }
+  .pill { display: inline-block; background: var(--panel2); border: 1px solid var(--line); color: var(--muted); border-radius: 16px; padding: 3px 12px; font-size: 12.5px; margin: 3px 4px 3px 0; }
+  @media (max-width: 640px) { h1 { font-size: 26px; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>DevSync <span class="badge">v1.0.0 · 28/28 测试全绿</span></h1>
+    <div class="subtitle">局域网三台电脑轮流优化同一批项目：A 机干完 <code>save</code>，B 机 <code>take</code> 接手——秒级接力，<b>永不重新克隆</b>，账号密码一并同步，局域网里其他人进不来。</div>
+    <div class="meta">
+      <a href="https://github.com/openclawzhangchong/lan-devsync-kit">GitHub 仓库 →</a>
+      <a href="#quickstart">快速开始</a>
+      <a href="#arch">架构</a>
+      <a href="#cmds">命令表</a>
+      <a href="#test">测试证据</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <h2>它解决什么问题</h2>
+  <div class="grid">
+    <div class="card"><div class="icon">🔁</div><h4>换机重新克隆</h4><p>枢纽保存全部历史，<code>devsync take</code> 一条命令接手：没有就克隆、有就增量同步。</p></div>
+    <div class="card"><div class="icon">🧊</div><h4>映射盘假死</h4><p>彻底弃用 SMB 挂载。git 走 HTTP（请求-响应式，无持久句柄），<b>不存在假死机制</b>。</p></div>
+    <div class="card"><div class="icon">🔒</div><h4>别人能看到共享</h4><p>私库 + 禁止注册 + 令牌认证 + 防火墙只放行自己的网段，四层防线。</p></div>
+    <div class="card"><div class="icon">🔑</div><h4>账号密码没法带走</h4><p><code>devsync secrets</code> 用独立私库同步 .env / 凭据，仅本人账号可读。</p></div>
+  </div>
+
+  <h2 id="arch">架构：一台电脑当枢纽，三台互为同事</h2>
+  <div class="arch">
+ 机器A (优化机1)          枢纽机 = 你的电脑                机器B (优化机2)
+┌────────────┐   push    ┌──────────────────┐   pull    ┌────────────┐
+│ E:\项目\foo ├──────────▶│ Gitea (端口3300)  │◀──────────┤ E:\项目\foo │
+│            │◀───pull───│ E:\devsync\      ├───push───▶│            │
+└────────────┘           │  ├ gitea\ 程序+DB │           └────────────┘
+      ▲                  │  ├ gitea-repos\  │                   ▲
+      │  devsync CLI     │  │  (私有裸仓库)  │     devsync CLI   │
+      └──────────────────┤  ├ secrets-sync  │◀──────────────────┘
+   （凭据 DPAPI 加密）     │  │  (密钥私库)   │  （凭据 DPAPI 加密）
+                          │  └ bin\ devsync  │
+                          └──────────────────┘
+  防火墙：3300 仅放行本网段 + 回环   开机自启：Windows 服务 (NSSM)</div>
+  <p class="muted">无需公网 · 无需 Docker · 无需数据库服务（SQLite 内置）· Gitea 单文件 122MB</p>
+
+  <h2 id="quickstart">快速开始</h2>
+  <h3>① 枢纽机（一次，约 10 分钟）</h3>
+<pre><code>powershell -ExecutionPolicy Bypass -File install\install-hub.ps1
+# 产物：E:\devsync\{gitea, gitea-repos, bin, secrets}
+#       + Windows 服务 DevSyncGitea（开机自启）+ 防火墙网段规则
+# 管理员密码在 E:\devsync\secrets\gitea-admin.txt（勿提交到任何仓库）</code></pre>
+  <h3>② 其他电脑接入（每台一次，约 2 分钟）</h3>
+<pre><code># 拷贝仓库的 install\ 目录过去，然后：
+powershell -ExecutionPolicy Bypass -File install\install-another-pc.ps1
+# 粘贴令牌（枢纽网页 头像→设置→应用→生成新令牌，勾选 repository 读写）</code></pre>
+  <h3>③ 日常接力（就三个动作）</h3>
+<pre><code>devsync save "完成了XX优化"      # 在干活的电脑：提交+安全推送
+devsync take foo                 # 换到另一台电脑：接手（克隆/同步+密钥+摘要）
+devsync handoff "下班交接"       # 可选：代码+密钥+交接笔记一键推走再走人</code></pre>
+
+  <h2 id="cmds">devsync 命令表</h2>
+  <table>
+    <tr><th>命令</th><th>作用</th></tr>
+    <tr><td><code>devsync init [目录]</code></td><td>把现有项目接入枢纽：自动建私库 + 首次推送</td></tr>
+    <tr><td><code>devsync clone &lt;仓库&gt;</code></td><td>从枢纽克隆并登记</td></tr>
+    <tr><td><code>devsync save [说明]</code></td><td>提交全部改动并安全推送（自动 rebase 防分叉；冲突时明确报错并教你怎么处理）</td></tr>
+    <tr><td><code>devsync sync</code></td><td>拉取远端最新 + 推送本地</td></tr>
+    <tr><td><code>devsync take &lt;仓库&gt;</code></td><td><b>接力核心</b>：克隆/增量同步 + 拉取密钥 + 打印接手摘要</td></tr>
+    <tr><td><code>devsync handoff "说明"</code></td><td>交接三件套：代码 + 密钥 + 交接笔记（.devsync/handoff/*.md）</td></tr>
+    <tr><td><code>devsync secrets push/pull</code></td><td>同步账号密码、.env 等敏感文件（独立私库，仅本人可读）</td></tr>
+    <tr><td><code>devsync status / doctor / open</code></td><td>状态总览 / 全面体检 / 打开枢纽网页</td></tr>
+  </table>
+  <p class="muted">脚本/CI 可依赖机器可读结果行：<code>RESULT: OK</code> / <code>RESULT: CONFLICT</code> / <code>RESULT: ERROR</code></p>
+
+  <h2>安全与隐私（四层防线）</h2>
+  <table>
+    <tr><th>层级</th><th>机制</th><th>实测</th></tr>
+    <tr><td>仓库级</td><td>新仓库一律私有，未授权者看到 404</td><td class="ok">✔ t05 通过</td></tr>
+    <tr><td>账号级</td><td>禁止注册 + 16位随机密码 + 可撤销令牌（DPAPI 加密存本机）</td><td class="ok">✔ t05 通过</td></tr>
+    <tr><td>网络级</td><td>防火墙仅放行 192.168.168.0/24 + 127.0.0.1</td><td class="ok">✔ t05 通过</td></tr>
+    <tr><td>传输级</td><td>可信内网 HTTP；不满足可启用 Gitea 内置 SSH 加密</td><td class="warn">文档提供升级路径</td></tr>
+  </table>
+
+  <h2 id="test">测试证据（两轮 28/28 全绿）</h2>
+  <table>
+    <tr><th>套件</th><th>内容</th><th>结果</th></tr>
+    <tr><td>t01-hub-health</td><td>服务/端口/API认证/防火墙规则</td><td class="ok">5/5</td></tr>
+    <tr><td>t02-git-relay</td><td><b>三机接力</b>：A init→B clone改→A sync收到→C take接手→status可见</td><td class="ok">8/8</td></tr>
+    <tr><td>t03-conflict</td><td>同行冲突必须明确报错 + 冲突态防呆拒绝</td><td class="ok">3/3</td></tr>
+    <tr><td>t04-secrets</td><td>密钥 push→模拟新机 pull→内容一致→私库属性</td><td class="ok">4/4</td></tr>
+    <tr><td>t05-security</td><td>无凭据拒绝/私库隐藏/注册禁用/网段防火墙</td><td class="ok">5/5</td></tr>
+    <tr><td>t06-doctor</td><td>devsync doctor 体检全绿</td><td class="ok">3/3</td></tr>
+  </table>
+  <p class="muted">证据留存于仓库 <code>evidence\</code> 目录（断言明细 + 控制台日志 + 汇总报告）。开发期共抓出并修复 9 个 bug，全部记录在 docs/07-测试报告.md。</p>
+
+  <h2>技术栈</h2>
+  <div>
+    <span class="pill">Gitea 28.4.0</span><span class="pill">SQLite WAL</span><span class="pill">NSSM 服务</span><span class="pill">PowerShell 5.1 兼容</span><span class="pill">git over HTTP</span><span class="pill">Windows DPAPI</span><span class="pill">防火墙网段白名单</span><span class="pill">静默提权安装</span><span class="pill">中文文档全套</span>
+  </div>
+
+  <footer>
+    <div>DevSync · 局域网多电脑代码接力工具 — 为"三台电脑轮流优化项目"而生。</div>
+    <div style="margin-top:6px">源码与文档：<a href="https://github.com/openclawzhangchong/lan-devsync-kit">github.com/openclawzhangchong/lan-devsync-kit</a> · License: MIT</div>
+  </footer>
+
+</main>
+</body>
+</html>

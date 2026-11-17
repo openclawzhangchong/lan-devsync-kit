@@ -7,3 +7,4 @@ secrets/
 *.tmp
 Thumbs.db
 desktop.ini
+.zcode-site/
