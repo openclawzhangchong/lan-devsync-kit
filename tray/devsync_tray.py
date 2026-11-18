@@ -66,21 +66,24 @@ def _font(size):
     return ImageFont.load_default()
 
 def make_icon(dot):
-    """品牌图标：青绿渐变圆角方块 + 居中「枢纽」 + 右上角状态点"""
+    """品牌图标：黑色圆角方块（区别于系统里一票绿色图标）+ 白色大字「枢」
+    + 右上角加大状态点（白描边，保证在黑底上也醒目）"""
     img = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
     grad = Image.new('RGBA', (64, 64))
-    top, bot = (13, 148, 136), (34, 197, 94)   # teal → green
+    top, bot = (48, 48, 52), (10, 10, 12)   # 深灰 → 黑
     g = ImageDraw.Draw(grad)
     for y in range(64):
         t = y / 63
         g.line([(0, y), (63, y)],
                fill=tuple(int(top[i] * (1 - t) + bot[i] * t) for i in range(3)) + (255,))
     mask = Image.new('L', (64, 64), 0)
-    ImageDraw.Draw(mask).rounded_rectangle((3, 3, 61, 61), radius=15, fill=255)
+    ImageDraw.Draw(mask).rounded_rectangle((2, 2, 62, 62), radius=15, fill=255)
     img.paste(grad, (0, 0), mask)
     d = ImageDraw.Draw(img)
-    d.text((30, 30), '枢纽', font=_font(22), fill='white', anchor='mm')
-    d.ellipse((46, 6, 58, 18), fill=dot)
+    d.rounded_rectangle((2, 2, 62, 62), radius=15,
+                        outline=(130, 130, 138, 255), width=2)   # 灰描边防融入深色任务栏
+    d.text((30, 34), '枢', font=_font(34), fill='white', anchor='mm')
+    d.ellipse((43, 3, 61, 21), fill=dot, outline=(255, 255, 255, 255), width=2)
     return img
 
 # ────────────────────────── 状态探测 ──────────────────────────
